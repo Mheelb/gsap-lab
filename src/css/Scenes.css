@@ -1,0 +1,28 @@
+.bg {
+    width: 100%;
+    height: 100%;
+    scale: 1.01;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+}
+
+.moon {
+    position: absolute;
+    z-index: 0;
+    top: 10%;
+    left: 60%;
+    scale: 1.5;   
+}
+
+.ET {
+    position: absolute;
+    z-index: 0;
+    top: 10%;
+    left: 90%;
+    scale: 0.15;
+    image-orientation: from-image;
+    transform: scaleX(-1);
+}

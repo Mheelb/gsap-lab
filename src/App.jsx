@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-route
 import './css/index.css'
 import App from './pages/Home.jsx'
 import About from './pages/About.jsx'
+import Scenes from './pages/Scenes.jsx';
 import NavBar from './components/navBar/NavBar.jsx'
 import Template from './template.jsx';
 
@@ -16,6 +17,7 @@ createRoot(document.getElementById('root')).render(
           <Routes>
             <Route path="/" element={<App />} />
             <Route path="/about" element={<About />} />
+            <Route path="/scenes" element={<Scenes />} />
         </Routes>
       </div>
     </div>
