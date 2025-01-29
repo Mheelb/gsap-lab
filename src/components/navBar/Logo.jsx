@@ -1,12 +1,22 @@
 import { useEffect, useRef } from 'react';
 import { MorphSVGPlugin } from "gsap-trial/MorphSVGPlugin";
 import { gsap } from "gsap-trial";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { pageOut } from '../../utils/animations';
 
 function Logo() {
 
+    const { pathname } = useLocation();
     const navigate = useNavigate();
     const logoRef = useRef(null);
+
+    const handleClick = (href) => (event) => {
+        event.preventDefault();
+        
+        if (pathname !== href) {
+            pageOut(href);
+        }
+    }
 
     useEffect(() => {
         gsap.registerPlugin(MorphSVGPlugin);
@@ -20,19 +30,14 @@ function Logo() {
             gsap.to("#logoStart", { morphSVG: "#logoStart", duration: 0.5 });
         };
 
-        const goToHome = () => {
-            navigate('/');
-        };
-
         logoElement.addEventListener("mouseover", handleMouseOver);
         logoElement.addEventListener("mouseout", handleMouseOut);
-        logoElement.addEventListener("click", goToHome);
 
     }, [navigate]);
     
 
     return (
-        <svg ref={logoRef} id="logo" version="1.0" xmlns="http://www.w3.org/2000/svg"
+        <svg ref={logoRef} onClick={handleClick('/')} id="logo" version="1.0" xmlns="http://www.w3.org/2000/svg"
               width="756.000000pt" height="330.000000pt" viewBox="0 0 756.000000 330.000000"
               preserveAspectRatio="xMidYMid meet">
 

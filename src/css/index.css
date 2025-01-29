@@ -10,3 +10,12 @@ body {
   overflow: auto;
   background-color: #000;
 }
+
+.transition-banner {
+  background-color: #fff;
+  align-content: center;
+}
+
+.transition-logo{
+  width: 100%;
+}

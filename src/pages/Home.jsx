@@ -15,7 +15,7 @@ function App() {
             opacity: 0, y: 100
         },
         {
-            opacity: 1, y: 0, duration: 1, ease: "power2.out", stagger: 0.33,
+            opacity: 1, y: 0, duration: 1, ease: "power2.out", stagger: 0.33, delay: 0.7
         }
     ).to(".word", {
         textShadow: "0px 0px 5px rgba(255, 255, 255, 0.8), 0px 0px 10px rgba(255, 255, 255, 0.6), 0px 0px 15px rgba(255, 255, 255, 0.4), 0px 0px 20px rgba(255, 255, 255, 0.2)",

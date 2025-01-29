@@ -1,21 +1,15 @@
 import { useEffect, useRef } from 'react';
 import Logo from './Logo.jsx'
 import { gsap } from "gsap-trial";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { pageOut } from '../../utils/animations';
 
 function Navbar () {
 
+    const { pathname } = useLocation();
     const naviguate = useNavigate();
     const sceneRef = useRef(null);
     const aboutRef = useRef(null);
-
-    const goToScene = () => {
-        naviguate('/scenes');
-    }
-
-    const goToAbout = () => {
-        naviguate('/about');
-    }
 
     const navAnim = () => {
         gsap.fromTo(".nav",
@@ -28,22 +22,24 @@ function Navbar () {
         )
     }
 
+    const handleClick = (href) => (event) => {
+        event.preventDefault();
+        
+        if (pathname !== href) {
+            pageOut(href);
+        }
+    }
+
     useEffect(() => {
         navAnim();
-
-        const sceneElement = sceneRef.current;
-        const aboutElement = aboutRef.current;
-
-        sceneElement.addEventListener("click", goToScene);
-        aboutElement.addEventListener("click", goToAbout);
     }, []);
 
     return (
         <div className="nav">
             <Logo />
             <ul>
-              <li><a ref={sceneRef}>nos scènes</a></li>
-              <li><a ref={aboutRef}>À propos</a></li>
+              <li><a onClick={handleClick("/scenes")} ref={sceneRef} >nos scènes</a></li>
+              <li><a onClick={handleClick('/about')} ref={aboutRef}>À propos</a></li>
             </ul>
         </div>
     )
