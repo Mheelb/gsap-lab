@@ -1,12 +1,15 @@
 import { useEffect } from "react";
 import "../css/Scenes.css";
 import { MotionPathPlugin } from "gsap-trial/MotionPathPlugin";
+import { Observer } from "gsap-trial/Observer";
 import gsap from "gsap-trial";
 
 function Scenes() {
 
-    const bgAnimation = () => {
-        gsap.timeline()
+    let moonTimeline
+
+    const moonIn = () => {
+        moonTimeline = gsap.timeline()
             .fromTo(".moon",
                 {
                     y: -200
@@ -49,19 +52,46 @@ function Scenes() {
         });
     };
 
+    const moonUp = () => {
+        gsap.to(".moon", {
+            y: -600,
+            duration: 3,
+            onStart: () => {
+                moonTimeline.pause();
+            }
+        });
+    };
+    const moonDown = () => {
+        gsap.to(".moon", {
+            y: 0,
+            duration: 2,
+            onComplete: () => {
+                moonTimeline.resume();
+            }
+        });
+    };
+
     useEffect(() => {
-        gsap.registerPlugin(MotionPathPlugin);
-        bgAnimation();
+        gsap.registerPlugin(MotionPathPlugin, Observer);
+        moonIn();
         ETAnimation();
 
         document.addEventListener('mousemove', parallax);
+        Observer.create({
+            type: "wheel,touch,pointer",
+            wheelSpeed: -1,
+            onDown: () => moonUp(),
+            onUp: () => moonDown(),
+            tolerance: 30,
+            preventDefault: true
+        });
     
     }, []);
 
     return (
 
 
-        <div className="">
+        <div className="scenes">
             <img className="bg" src="src/assets/clouds.png" data-value="1"/>
             <img className="moon" src="src/assets/moon.png" data-value="1"/>
             <img className="ET" src="src/assets/ET.png"/>

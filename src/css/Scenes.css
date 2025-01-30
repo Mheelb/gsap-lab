@@ -3,26 +3,30 @@
     height: 100%;
     scale: 1.01;
     object-fit: cover;
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     z-index: 0;
+    pointer-events: none;
 }
 
 .moon {
-    position: absolute;
+    position: fixed;
     z-index: 0;
     top: 10%;
     left: 60%;
-    scale: 1.5;   
+    scale: 1.5;
+    object-fit: contain;
+    pointer-events: none;
 }
 
 .ET {
-    position: absolute;
+    position: fixed;
     z-index: 0;
     top: 10%;
     left: 90%;
     scale: 0.15;
     image-orientation: from-image;
     transform: scaleX(-1);
+    pointer-events: none;
 }
