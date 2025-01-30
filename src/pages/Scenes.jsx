@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import "../css/Scenes.css";
 import { MotionPathPlugin } from "gsap-trial/MotionPathPlugin";
 import { Observer } from "gsap-trial/Observer";
@@ -7,6 +7,8 @@ import gsap from "gsap-trial";
 function Scenes() {
 
     let moonTimeline
+    let moonIndex = useRef(0);
+    let animating = useRef(false);
 
     const moonIn = () => {
         moonTimeline = gsap.timeline()
@@ -18,6 +20,7 @@ function Scenes() {
                     y: 0, duration: 2
                 })
             .to(".moon", {
+                delay: 1,
                 y:10,
                 repeat: -1,
                 duration: 2,
@@ -52,23 +55,87 @@ function Scenes() {
         });
     };
 
+
     const moonUp = () => {
-        gsap.to(".moon", {
-            y: -600,
-            duration: 3,
-            onStart: () => {
-                moonTimeline.pause();
-            }
-        });
+        if (animating.current) return;
+        animating.current = true;
+
+        if (moonIndex.current === 0) {
+            gsap.to(".moon", {
+                y: -600,
+                duration: 2,
+                onStart: () => {
+                    moonTimeline.pause();
+                },
+                onComplete: () => {
+                    animating.current = false;
+                }
+            });
+            moonIndex.current = 1;
+        } else if (moonIndex.current === 1) {
+            gsap.fromTo(".moon", {
+                y: 1000,
+            }, {
+                y: 0,
+                duration: 3,
+                onComplete: () => {
+                    moonTimeline.play();
+                    animating.current = false;
+                }
+            });
+            moonIndex.current = 0;
+        } else if (moonIndex.current === -1) {
+            gsap.to(".moon", {
+                y: 0,
+                duration: 3,
+                onComplete: () => {
+                    moonTimeline.play();
+                    animating.current = false;
+                }
+            });
+            moonIndex.current = 0;
+        }
     };
+
     const moonDown = () => {
-        gsap.to(".moon", {
-            y: 0,
-            duration: 2,
-            onComplete: () => {
-                moonTimeline.resume();
-            }
-        });
+        if (animating.current) return;
+        animating.current = true;
+
+        if (moonIndex.current === 0) {
+            gsap.to(".moon", {
+                y: 1000,
+                duration: 3,
+                onStart: () => {
+                    moonTimeline.pause();
+                },
+                onComplete: () => {
+                    animating.current = false;
+                }
+            });
+            moonIndex.current = -1;
+        } else if (moonIndex.current === 1) {
+            gsap.to(".moon", {
+                y: 0,
+                duration: 2,
+                onComplete: () => {
+                    moonTimeline.play();
+                    animating.current = false;
+                }
+            });
+            moonIndex.current = 0;
+        } else if (moonIndex.current === -1) {
+            gsap.fromTo(".moon", {
+                y: -600,
+            }, {
+                y: 0,
+                duration: 2,
+                onComplete: () => {
+                    moonTimeline.play();
+                    animating.current = false;
+                }
+            });
+            moonIndex.current = 0;
+        }
     };
 
     useEffect(() => {
@@ -76,16 +143,18 @@ function Scenes() {
         moonIn();
         ETAnimation();
 
-        document.addEventListener('mousemove', parallax);
         Observer.create({
             type: "wheel,touch,pointer",
             wheelSpeed: -1,
-            onDown: () => moonUp(),
-            onUp: () => moonDown(),
+            onDown: () => !animating.current && moonUp(),
+            onUp: () => !animating.current && moonDown(),
             tolerance: 30,
             preventDefault: true
         });
     
+        return () => {
+            document.removeEventListener('mousemove', parallax);
+        };
     }, []);
 
     return (
