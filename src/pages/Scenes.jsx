@@ -10,6 +10,9 @@ function Scenes() {
     const [currentIndex, setCurrentIndex] = useState(0);
     const scenesContainer = useRef(null);
     const animating = useRef(false);
+    const audioForestRef = useRef(null);
+    const audioWolfRef = useRef(null);
+    const audioBushRef = useRef(null);
 
     function showSlide(index) {
         if (animating.current) return;
@@ -34,15 +37,44 @@ function Scenes() {
         })
         .to(currentSlide, { opacity: 0, duration: 0.5 })
         .to(nextSlide, { opacity: 1, duration: 0.5 }, "-=0.5");
-    }
+    };
 
     function nextSlide() {
         showSlide(currentIndex + 1);
-    }
+        audio();
+    };
 
     function prevSlide() {
         showSlide(currentIndex - 1);
-    }
+        audio();
+    };
+
+    function audio() {
+        if (currentIndex === 0) {
+            fadeInAudio();
+        } else {
+            fadeOutAudio();
+        }
+    };
+
+    function fadeInAudio() {
+        audioForestRef.current.play();
+        setInterval(() => {
+            audioWolfRef.current.play();
+        }, 30000);
+        setInterval(() => {
+            audioBushRef.current.play();
+        }, 25000);
+        gsap.to(audioForestRef.current, { volume: 1, duration: 1 });
+        gsap.to(audioWolfRef.current, { volume: 1, duration: 1 });
+        gsap.to(audioBushRef.current, { volume: 1, duration: 1 });
+    };
+
+    function fadeOutAudio() {
+        gsap.to(audioForestRef.current, { volume: 0, duration: 1 });
+        gsap.to(audioWolfRef.current, { volume: 0, duration: 1 });
+        gsap.to(audioBushRef.current, { volume: 0, duration: 1 });
+    };
 
     useEffect(() => {
         gsap.registerPlugin(Observer);
@@ -55,10 +87,13 @@ function Scenes() {
             tolerance: 30,
             preventDefault: true
         });
-    }, [currentIndex]);
+    }, []);
 
     return (
         <div className="carousel">
+            <audio ref={audioForestRef} src="src/assets/mp3/forest-ambiance.mp3" loop />
+            <audio ref={audioWolfRef} src="src/assets/mp3/wolf.mp3" />
+            <audio ref={audioBushRef} src="src/assets/mp3/bush.mp3" />
             <div ref={scenesContainer} className="scenes-container">
                 <div className="scene active">
                     <Moon />

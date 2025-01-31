@@ -8,7 +8,6 @@ function Forest() {
     };
 
     const randomY = () => {
-        //entre -40 et 50
         return Math.floor(Math.random() * 90) - 40;
     }
 
@@ -29,7 +28,7 @@ function Forest() {
         eyesBlink(randomX(), randomY());
         setInterval(() => {
             eyesBlink(randomX(), randomY());
-        }, 10000);
+        }, 50000);
     }, []);
 
     return (
